@@ -1,0 +1,108 @@
+openapi: 3.0.1
+info:
+  title: Awesome Pizza API
+  description: API per la gestione degli ordini di pizza
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /ordini:
+    post:
+      summary: Crea un nuovo ordine
+      operationId: creaOrdine
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ordine'
+      responses:
+        '200':
+          description: Ordine creato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ordine'
+        '500':
+          description: Errore interno generico'
+  /ordini/{codice}:
+    get:
+      summary: Ottieni un ordine per codice
+      operationId: getOrdine
+      parameters:
+        - name: codice
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Dettagli dell'ordine
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ordine'
+        '404':
+          description: Ordine non trovato
+        '500':
+          description: Errore interno generico'
+  /ordini/successivo:
+    post:
+      summary: Ottieni il prossimo ordine
+      operationId: prossimoOrdine
+      responses:
+        '200':
+          description: Prossimo ordine
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ordine'
+        '204':
+          description: Nessun ordine disponibile
+        '500':
+          description: Errore interno generico'
+  /ordini/{codice}/stato:
+    put:
+      summary: Aggiorna lo stato di un ordine
+      operationId: aggiornaStatoOrdine
+      parameters:
+        - name: codice
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: stato
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [IN_ATTESA, IN_PREPARAZIONE, PRONTO]
+      responses:
+        '200':
+          description: Stato dell'ordine aggiornato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ordine'
+        '404':
+          description: Ordine non trovato
+        '500':
+          description: Errore interno generico'
+components:
+  schemas:
+    Ordine:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        codice:
+          type: string
+        dataInserimento:
+          type: string
+          format: date
+        pizza:
+          type: string
+        stato:
+          type: string
+          enum: [IN_ATTESA, IN_PREPARAZIONE, PRONTO]

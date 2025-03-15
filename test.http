@@ -1,0 +1,16 @@
+### Creare un nuovo ordine
+POST http://localhost:8080/ordini
+Content-Type: application/json
+
+{
+  "pizza": "Marinara"
+}
+
+### Ottenere un ordine per codice
+GET http://localhost:8080/ordini/2025314-2
+
+### Ottenere il prossimo ordine
+POST http://localhost:8080/ordini/successivo
+
+### Aggiornare lo stato di un ordine
+PUT http://localhost:8080/ordini/2025314-1/stato?stato=PRONTO
